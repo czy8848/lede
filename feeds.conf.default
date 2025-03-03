@@ -4,5 +4,5 @@ src-git routing https://github.com/coolsnowwolf/routing.git
 src-git telephony https://github.com/coolsnowwolf/telephony.git
 src-git kenzo https://github.com/kenzok8/openwrt-packages.git
 src-git small https://github.com/kenzok8/small.git
-src-git small-package https://github.com/kenzok8/small-package.git
+src-git smallpackage https://github.com/kenzok8/small-package.git
 src-git nas https://github.com/linkease/nas-packages-luci.git
