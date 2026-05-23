@@ -1,0 +1,25 @@
+name: Extract Old Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 20230609
+        required: true
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag_name }}
+          fetch-depth: 0
+
+      - name: Push to target repo
+        env:
+          TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
+          TARGET_REPO: ${{ secrets.TARGET_REPO }}
+        run: |
+          git push --force https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git HEAD:main
