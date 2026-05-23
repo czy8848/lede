@@ -11,12 +11,18 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug - Print TARGET_REPO
+      - name: Test token authentication
         env:
+          TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
         run: |
-          echo "TARGET_REPO value is: [$TARGET_REPO]"
-          echo "Length: ${#TARGET_REPO}"
+          # 测试 token 是否能访问目标仓库
+          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" \
+            -H "Authorization: token ${TARGET_TOKEN}" \
+            https://api.github.com/repos/${TARGET_REPO}
+          
+          # 测试 git 操作
+          git ls-remote https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git
 
       - name: Checkout source repo
         uses: actions/checkout@v4
@@ -29,5 +35,4 @@ jobs:
           TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
         run: |
-          echo "Pushing to: https://github.com/${TARGET_REPO}.git"
           git push --force https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git HEAD:main
