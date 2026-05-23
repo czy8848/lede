@@ -4,26 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 20230609
+        description: '要提取的Tag名称（如 v1.0.0）'
         required: true
 
 jobs:
   extract:
     runs-on: ubuntu-latest
     steps:
-      - name: Test token authentication
-        env:
-          TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
-          TARGET_REPO: ${{ secrets.TARGET_REPO }}
-        run: |
-          # 测试 token 是否能访问目标仓库
-          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" \
-            -H "Authorization: token ${TARGET_TOKEN}" \
-            https://api.github.com/repos/${TARGET_REPO}
-          
-          # 测试 git 操作
-          git ls-remote https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git
-
       - name: Checkout source repo
         uses: actions/checkout@v4
         with:
@@ -33,6 +20,10 @@ jobs:
       - name: Push to target repo
         env:
           TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
-          TARGET_REPO: ${{ secrets.TARGET_REPO }}
         run: |
-          git push --force https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git HEAD:main
+          # 直接写死目标仓库地址
+          TARGET_REPO="czy8848/coolsnowwolf20230609"
+          echo "Pushing to: https://github.com/${TARGET_REPO}.git"
+          git push --force \
+            https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git \
+            HEAD:main
