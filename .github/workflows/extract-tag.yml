@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: '要提取的Tag名称（如 v1.0.0）'
+        description: 20230609
         required: true
 
 jobs:
