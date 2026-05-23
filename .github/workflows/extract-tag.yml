@@ -11,6 +11,13 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug - Print TARGET_REPO
+        env:
+          TARGET_REPO: ${{ secrets.TARGET_REPO }}
+        run: |
+          echo "TARGET_REPO value is: [$TARGET_REPO]"
+          echo "Length: ${#TARGET_REPO}"
+
       - name: Checkout source repo
         uses: actions/checkout@v4
         with:
@@ -22,4 +29,5 @@ jobs:
           TARGET_TOKEN: ${{ secrets.TARGET_TOKEN }}
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
         run: |
+          echo "Pushing to: https://github.com/${TARGET_REPO}.git"
           git push --force https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git HEAD:main
